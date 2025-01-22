@@ -1,9 +1,7 @@
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import FileResponse
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from services.toc_updater import TocUpdater
-import uuid
-import os
+from routes.docx_routes import router as docx_router
+import logging
 
 app = FastAPI()
 
@@ -15,21 +13,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-toc_updater = TocUpdater()
+app.include_router(docx_router, prefix="/api")
 
-@app.post("/upload-docx/")
-async def upload_docx(file: UploadFile = File(...)):
-    file_id = str(uuid.uuid4())
-    temp_file_path = f"temp/{file_id}.docx"
-    
-    with open(temp_file_path, "wb") as buffer:
-        buffer.write(await file.read())
-    
-    updated_file_path = await toc_updater.update_toc(temp_file_path)
-    
-    os.remove(temp_file_path)  # Clean up the temporary file
-    
-    return FileResponse(updated_file_path, media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document', filename=f"updated_{file_id}.docx")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     import uvicorn

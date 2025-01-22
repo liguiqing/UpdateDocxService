@@ -1,27 +1,24 @@
+import win32com.client as win32
+import logging
+
 class TocUpdater:
     def __init__(self):
-        pass
+        self.word_app = win32.Dispatch("Word.Application")
+        self.word_app.Visible = False
 
-    async def update_toc(self, docx_file_path):
-        import uuid
-        from docx import Document
-
-        # Generate a unique identifier for tracking
-        file_id = str(uuid.uuid4())
-
-        # Load the DOCX file
-        doc = Document(docx_file_path)
-
-        # Update the table of contents
-        # This is a placeholder for the actual TOC update logic
-        # You would implement the logic to update the TOC here
-
-        # Save the updated document
-        updated_file_path = f"updated_{file_id}.docx"
-        doc.save(updated_file_path)
-
-        # Return the UUID for tracking
-        return file_id, updated_file_path
+    async def update_toc(self, file_path):
+        try:
+            doc = self.word_app.Documents.Open(file_path)
+            for toc in doc.TablesOfContents:
+                toc.Update()
+            doc.Save()
+            doc.Close()
+            
+            logging.info(f"成功更新目录: {file_path}")
+            return file_path
+        except Exception as e:
+            logging.error(f"更新目录失败: {file_path}, 错误: {e}")
+            raise e
 
     def delete_temp_files(self, file_paths):
         import os
