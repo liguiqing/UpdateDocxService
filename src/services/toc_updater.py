@@ -6,7 +6,7 @@ class TocUpdater:
         self.word_app = win32.Dispatch("Word.Application")
         self.word_app.Visible = False
 
-    async def update_toc(self, file_path):
+    def update_toc(self, file_path):
         try:
             doc = self.word_app.Documents.Open(file_path)
             for toc in doc.TablesOfContents:

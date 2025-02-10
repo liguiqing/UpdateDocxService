@@ -53,6 +53,13 @@ UpdateDocxService
    ```
    python src/main.py
    ```
+5. **<span style="color:red"> Run the application with start_service.bat:</span>**
+
+```
+./start_service.bat
+```
+
+使用 start_service.bat 启动时，请在要目录下添加一个 test.docx 空文件
 
 ## API Endpoints
 

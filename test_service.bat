@@ -1,5 +1,4 @@
 @echo off
-REM filepath: /E:/temp/UpdateDocxService/test_service.bat
 
 REM 设置测试目录和目标目录
 set TEST_DIR=E:\temp\test-docx
