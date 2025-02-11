@@ -60,8 +60,6 @@ UpdateDocxService
 ./start_service.bat
 ```
 
-使用 start_service.bat 启动时，请在要目录下添加一个 test.docx 空文件
-
 ### 注意
 
 在 Windows Server 2008 R2 下安装 Python 时，只能安装 [Python 3.7.x](https://www.python.org/downloads/windows/)。同时需要安装 [Visual C++ Redistributable for Visual Studio 2017](https://aka.ms/vs/17/release/vc_redist.x64.exe)。
