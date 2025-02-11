@@ -1,5 +1,5 @@
 import win32com.client as win32
-import logging
+from config import logger  # 导入日志记录器
 
 class TocUpdater:
     def __init__(self):
@@ -14,10 +14,10 @@ class TocUpdater:
             doc.Save()
             doc.Close()
             
-            logging.info(f"成功更新目录: {file_path}")
+            logger.info(f"成功更新目录: {file_path}")
             return file_path
         except Exception as e:
-            logging.error(f"更新目录失败: {file_path}, 错误: {e}")
+            logger.error(f"更新目录失败: {file_path}, 错误: {e}")
             raise e
 
     def delete_temp_files(self, file_paths):

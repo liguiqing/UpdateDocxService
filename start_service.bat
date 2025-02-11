@@ -30,14 +30,14 @@ echo Server Status: %status%
 
 if %status% geq 500 (
     echo Restarting service...
-    timeout /t 10 >nul
+    timeout /t 5 >nul
     taskkill /F /T /PID %SERVICE_PID%
     timeout /t 3 >nul
     goto loop
 )
 
-REM 等待一分钟
-timeout /t 60 >nul
+REM 等待5秒
+timeout /t 5 >nul
 goto check
 
 pause

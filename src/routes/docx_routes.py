@@ -2,7 +2,7 @@ from fastapi import APIRouter, File, UploadFile, HTTPException, Request, Backgro
 from fastapi.responses import FileResponse, JSONResponse
 from uuid import uuid4
 import os
-import logging
+from config import logger  # 导入日志记录器
 from services.toc_updater import TocUpdater
 from config import TEMP_DIR
 from utils.status_manager import write_status,read_status
@@ -11,7 +11,6 @@ from utils.file_handler import save_file, delete_temp_files
 
 router = APIRouter()
 toc_updater = TocUpdater()
-logger = logging.getLogger(__name__)
 
 # 跟踪文件更新状态
 file_update_status = {}
@@ -99,9 +98,6 @@ async def delete_docx(request: Request, file_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/test")
-async def test(request: Request, file_id: str):
+async def test():
     """检测服务是否正常"""
-    server_instance_id = request.headers.get("X-Server-Instance-ID")
-    logger.info(f"GET: /test X-Server-Instance-ID: {server_instance_id}")
-
-    return JSONResponse(content={"message": "Server is running!!!", "server_instance_id": server_instance_id})
+    return JSONResponse(content={"message": "Server is running!!!"})

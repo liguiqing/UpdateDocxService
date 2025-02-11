@@ -9,6 +9,8 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from routes.docx_routes import router as docx_router
 from utils.status_manager import write_status
+from config import logger  # 导入日志记录器
+
 app = FastAPI()
 
 # 允许跨域
@@ -22,11 +24,8 @@ app.add_middleware(
 
 app.include_router(docx_router, prefix="/api")
 
-# 配置日志
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
-def find_available_port(start_port=48000):
+def find_available_port(start_port=48001):
     """找到一个可用端口"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

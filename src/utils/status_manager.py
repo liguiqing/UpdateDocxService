@@ -1,7 +1,5 @@
 import asyncio
-import logging
-
-logger = logging.getLogger(__name__)
+from config import logger  # 导入日志记录器
 
 STATUS_FILE = "status.txt"
 _lock = asyncio.Lock()  # 防止并发写入冲突
