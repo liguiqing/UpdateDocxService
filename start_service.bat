@@ -13,23 +13,30 @@ pip install -r requirements.txt
 :loop
 REM 启动服务
 start /b python src/main.py
-set SERVICE_PID=%!
 
 REM 等待服务启动
 timeout /t 10
 
+set /p SERVICE_PID=<pid.txt
+echo Server PID: %SERVICE_PID%
+
 REM 读取 SERVER_INSTANCE_ID
 set /p SERVER_INSTANCE_ID=<server_instance_id.txt
+echo Server Instance ID: %SERVER_INSTANCE_ID%
 
 :check
 REM 测试 API
-
 for /f "tokens=2 delims=:,{} " %%i in ('curl -s -F "file=@test.docx" http://%SERVER_INSTANCE_ID%/api/upload-docx/ ^| findstr /i "uuid"') do set uuid=%%i
 curl -X DELETE -H "X-Server-Instance-ID: %SERVER_INSTANCE_ID%" http://%SERVER_INSTANCE_ID%/api/delete-docx/%uuid%
 
 set /p status=<status.txt
+echo Server Status: %status%
+
 if %status% geq 500 (
-    taskkill /f /pid %SERVICE_PID%
+    echo Restarting service...
+    timeout /t 10
+    taskkill /F /T /PID %SERVICE_PID%
+    timeout /t 3
     goto loop
 )
 
