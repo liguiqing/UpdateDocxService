@@ -15,7 +15,7 @@ REM 启动服务
 start /b python src/main.py
 
 REM 等待服务启动
-timeout /t 10
+timeout /t 10 >nul
 
 set /p SERVICE_PID=<pid.txt
 echo Server PID: %SERVICE_PID%
@@ -26,22 +26,22 @@ echo Server Instance ID: %SERVER_INSTANCE_ID%
 
 :check
 REM 测试 API
-for /f "tokens=2 delims=:,{} " %%i in ('curl -s -F "file=@test.docx" http://%SERVER_INSTANCE_ID%/api/upload-docx/ ^| findstr /i "uuid"') do set uuid=%%i
-curl -X DELETE -H "X-Server-Instance-ID: %SERVER_INSTANCE_ID%" http://%SERVER_INSTANCE_ID%/api/delete-docx/%uuid%
+REM for /f "tokens=2 delims=:,{} " %%i in ('curl -s -F "file=@test.docx" http://%SERVER_INSTANCE_ID%/api/upload-docx/ ^| findstr /i "uuid"') do set uuid=%%i
+REM curl -X DELETE -H "X-Server-Instance-ID: %SERVER_INSTANCE_ID%" http://%SERVER_INSTANCE_ID%/api/delete-docx/%uuid%
 
 set /p status=<status.txt
 echo Server Status: %status%
 
 if %status% geq 500 (
     echo Restarting service...
-    timeout /t 10
+    timeout /t 10 >nul
     taskkill /F /T /PID %SERVICE_PID%
-    timeout /t 3
+    timeout /t 3 >nul
     goto loop
 )
 
 REM 等待一分钟
-timeout /t 60
+timeout /t 60 >nul
 goto check
 
 pause
