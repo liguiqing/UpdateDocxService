@@ -97,3 +97,11 @@ async def delete_docx(request: Request, file_id: str):
     except Exception as e:
         logger.error(f"An error occurred while deleting file: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/test")
+async def test(request: Request, file_id: str):
+    """检测服务是否正常"""
+    server_instance_id = request.headers.get("X-Server-Instance-ID")
+    logger.info(f"GET: /test X-Server-Instance-ID: {server_instance_id}")
+
+    return JSONResponse(content={"message": "Server is running!!!", "server_instance_id": server_instance_id})

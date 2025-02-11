@@ -68,6 +68,14 @@ UpdateDocxService
 
 ## API Endpoints
 
+### 检测服务是否正常
+
+#### POST /api/test
+
+响应：
+
+- 服务成功的消息。
+
 ### 上传文件
 
 #### POST /api/upload-docx/
