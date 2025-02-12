@@ -85,6 +85,19 @@ UpdateDocxService
 响应：
 
 - `uuid`: 上传文件的唯一标识符。
+- `X-Server-Instance-ID`: response.header("X-Server-Instance-ID")
+
+### 读取文件的处理状态
+
+#### GET /api/status-docx/{uuid}
+
+请求参数：
+
+- `uuid`: 上传文件的唯一标识符。
+- `X-Server-Instance-ID`: request.header 参数。响应：
+
+- `uuid`: 上传文件的唯一标识符。
+- `status`: updating--正在更新；updated--更新成功；error--更新失败
 
 ### 读取更新后的文件
 
@@ -93,8 +106,7 @@ UpdateDocxService
 请求参数：
 
 - `uuid`: 上传文件的唯一标识符。
-
-响应：
+- `X-Server-Instance-ID`: request.header 参数。响应：
 
 - 更新后的 DOCX 文件。
 
@@ -105,8 +117,7 @@ UpdateDocxService
 请求参数：
 
 - `uuid`: 上传文件的唯一标识符。
-
-响应：
+- `X-Server-Instance-ID`: request.header 参数。响应：
 
 - 删除成功的消息。
 
@@ -254,6 +265,7 @@ import org.docx4j.wml.P;
 public class UpdateDocxServiceExample {
     public static void main(String[] args) {
         String uploadUrl = "http://localhost:8000/api/upload-docx/";
+        String statusUrl = "http://localhost:8000/api/status-docx/";
         String downloadUrl = "http://localhost:8000/api/download-docx/";
         String deleteUrl = "http://localhost:8000/api/delete-docx/";
         String filePath = "E:/temp/test-docx/sample.docx";

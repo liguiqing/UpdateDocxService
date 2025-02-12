@@ -19,10 +19,3 @@ class TocUpdater:
         except Exception as e:
             logger.error(f"更新目录失败: {file_path}, 错误: {e}")
             raise e
-
-    def delete_temp_files(self, file_paths):
-        import os
-
-        for file_path in file_paths:
-            if os.path.exists(file_path):
-                os.remove(file_path)

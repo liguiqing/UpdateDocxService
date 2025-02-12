@@ -28,6 +28,12 @@ async def process_file(file_id, file_path):
         await write_status("500")
         logger.error(f"An error occurred while updating file: {e}")
 
+
+@router.get("/test")
+async def test():
+    """检测服务是否正常"""
+    return JSONResponse(content={"message": "Server is running!!!"})
+
 @router.post("/upload-docx/")
 async def upload_docx(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     """上传 DOCX 文件并异步更新 TOC"""
@@ -53,6 +59,17 @@ async def upload_docx(background_tasks: BackgroundTasks, file: UploadFile = File
         logger.error(f"An error occurred: {e}")
         file_update_status[file_id] = "error"
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/status-docx/{file_id}")
+async def status_docx(request: Request, file_id: str):
+    """读取文件更新状态"""
+    server_instance_id = request.headers.get("X-Server-Instance-ID")
+    logger.info(f"GET: /status-docx X-Server-Instance-ID: {server_instance_id}")
+
+    status = file_update_status.get(file_id)
+    if not status:
+        raise HTTPException(status_code=404, detail="File not found")
+    return JSONResponse(content={"uuid": file_id,status: status}, headers={"X-Server-Instance-ID": server_instance_id})
 
 @router.get("/download-docx/{file_id}")
 async def download_docx(request: Request, file_id: str):
@@ -97,7 +114,3 @@ async def delete_docx(request: Request, file_id: str):
         logger.error(f"An error occurred while deleting file: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/test")
-async def test():
-    """检测服务是否正常"""
-    return JSONResponse(content={"message": "Server is running!!!"})
