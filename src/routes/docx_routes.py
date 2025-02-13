@@ -24,7 +24,8 @@ async def process_file(file_id, file_path):
         file_update_status[file_id] = "updated"
         logger.info(f"File {file_path} updated successfully")
     except Exception as e:
-        file_update_status[file_id] = "error"
+        # file_update_status[file_id] = "error"
+        delete_temp_files(file_path)
         await write_status("500")
         logger.error(f"An error occurred while updating file: {e}")
 
@@ -57,7 +58,7 @@ async def upload_docx(background_tasks: BackgroundTasks, file: UploadFile = File
         return JSONResponse(content={"uuid": file_id})
     except Exception as e:
         logger.error(f"An error occurred: {e}")
-        file_update_status[file_id] = "error"
+        # file_update_status[file_id] = "error"
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/status-docx/{file_id}")
@@ -82,8 +83,6 @@ async def download_docx(request: Request, file_id: str):
 
     if status == "updating":
         return JSONResponse(content={"status": "updating"}, status_code=202, headers={"X-Server-Instance-ID": server_instance_id})
-    elif status == "error":
-        raise HTTPException(status_code=500, detail="File update failed")
     elif status != "updated" or not os.path.exists(updated_file_path):
         raise HTTPException(status_code=404, detail="File not found")
 

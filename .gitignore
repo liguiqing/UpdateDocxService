@@ -99,6 +99,7 @@ $RECYCLE.BIN/
 *.log
 
 # Test service batch script
+/logs
 */temp
 */**/.docx 
 *.docx
